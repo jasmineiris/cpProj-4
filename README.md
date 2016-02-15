@@ -2,7 +2,7 @@
 **Twitterpated** is a basic twitter app to read and compose tweets the [Twitter API](https://apps.twitter.com/).
 Time spent: **8** hours spent in total
 
-## Resources: David Wayman @r3dcrosse and Monte Thakkar @Monte9 github helped me with the OAuth, retweet and faovite counts. It's still not completely implemented but without their githubs I wouldn't of been able to complete my project. Huge thank you to them!
+Resources: David Wayman @r3dcrosse and Monte Thakkar @Monte9 github helped me with the OAuth, retweet and faovite counts. It's still not completely implemented but without their githubs I wouldn't of been able to complete my project. Huge thank you to them!
 
 The following **required** functionality is completed:
 
