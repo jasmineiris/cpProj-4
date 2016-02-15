@@ -9,8 +9,8 @@
 import UIKit
 import BDBOAuth1Manager
 
-let twitterConsumerKey = "Ht1oYxlIFepvVopclImPN4GJ2"
-let twitterConsumerSecret = "NQ17EctGVhjGlUoOMzoKctF6J0gEqTRxAgxpSlOy2kuhvbM7m0"
+var twitterConsumerKey: String?
+var twitterConsumerSecret: String?
 let twitterBaseURL = NSURL(string: "https://api.twitter.com")
 
 class TwitterClient: BDBOAuth1SessionManager {
@@ -19,6 +19,16 @@ class TwitterClient: BDBOAuth1SessionManager {
     
 
     class var sharedInstance: TwitterClient {
+        var keys: NSDictionary?
+        
+        if let path = NSBundle.mainBundle().pathForResource("keys", ofType: "plist") {
+            keys = NSDictionary(contentsOfFile: path)
+        }
+        if let dict = keys {
+            twitterConsumerSecret = keys?["parseTwitterAppSecret"] as? String
+            twitterConsumerKey = keys?["parseTwitterAppKey"] as? String
+        }
+        
         struct Static {
             static let instance = TwitterClient(baseURL: twitterBaseURL, consumerKey: twitterConsumerKey, consumerSecret: twitterConsumerSecret)
         }
@@ -39,6 +49,7 @@ class TwitterClient: BDBOAuth1SessionManager {
             },
             failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
                 print("error getting home timeline")
+                print(error)
                 completion(tweets: nil, error: error)
         })
 
@@ -49,7 +60,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         
         // Fetch request token and redirect to authorization page
         TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
-        TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "GET", callbackURL: NSURL(string: "jiris://oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) -> Void in
+        TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "GET", callbackURL: NSURL(string: "jiris27://oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) -> Void in
             
             let authURL = NSURL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token)")
             UIApplication.sharedApplication().openURL(authURL!)
@@ -89,7 +100,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func retweet(id: Int, params: NSDictionary?, completion: (error: NSError?) -> () ){
-        POST("1.1/statuses/retweet/\(id).json", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+        POST("1.1/statuses/retweet/\(id).json", parameters: params, progress: nil, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
             print("Retweeted tweet with id: \(id)")
             completion(error: nil)
             }, failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
@@ -100,7 +111,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func likeTweet(id: Int, params: NSDictionary?, completion: (error: NSError?) -> () ){
-        POST("1.1/favorites/create.json?id=\(id)", parameters: params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+        POST("1.1/favorites/create.json?id=\(id)", parameters: params, progress: nil, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
             print("Liked tweet with id: \(id)")
             completion(error: nil)
             }, failure: { (operation: NSURLSessionDataTask?, error: NSError!) -> Void in
