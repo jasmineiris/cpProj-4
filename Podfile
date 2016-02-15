@@ -1,10 +1,5 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '8.0'
-# Uncomment this line if you're using Swift
 use_frameworks!
+platform :ios, "8.0"
 
-target 'Twitterpated1.0' do
-    pod "AFNetworking"
-    pod "BDBOAuth1Manager"
-end
-
+pod "AFNetworking"
+pod "BDBOAuth1Manager"

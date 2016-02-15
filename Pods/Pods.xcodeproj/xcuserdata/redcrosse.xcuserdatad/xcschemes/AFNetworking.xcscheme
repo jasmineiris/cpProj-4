@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '3008DC7BB7F980F84ED53BBA'
-               BlueprintName = 'BDBOAuth1Manager'
+               BlueprintIdentifier = '3929C10F0283673A19CBCCC9'
+               BlueprintName = 'AFNetworking'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'BDBOAuth1Manager.framework'>
+               BuildableName = 'AFNetworking.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

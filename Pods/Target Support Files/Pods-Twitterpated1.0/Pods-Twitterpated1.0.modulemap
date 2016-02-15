@@ -1,6 +1,0 @@
-framework module Pods_Twitterpated1_0 {
-  umbrella header "Pods-Twitterpated1.0-umbrella.h"
-
-  export *
-  module * { export * }
-}
