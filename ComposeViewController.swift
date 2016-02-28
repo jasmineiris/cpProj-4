@@ -22,29 +22,42 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.textView.delegate = self
         // Do any additional setup after loading the view.
     }
+    
+    @IBAction func onDismiss(sender: AnyObject) {
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
-        // 1
-        let nav = self.navigationController?.navigationBar
-        // 2
-        //nav?.barStyle = UIBarStyle.Black
-        //nav?.tintColor = UIColor.yellowColor()
-        // 3
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        imageView.contentMode = .ScaleAspectFit
-        // 4
-        let image = UIImage(named: "Twitter_logo_white_48")
-        imageView.image = image
-        // 5
-        navigationItem.titleView = imageView
+    @IBAction func onTweet(sender: AnyObject) {
+        let tweetMessage = textView.text
+        let escapedTweetMessage = tweetMessage.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+        TwitterClient.sharedInstance.tweeting(escapedTweetMessage!, params: nil , completion: { (error) -> () in
+            print("chirping")
+            print(error)
+        })
+        
+        let alert = UIAlertController(title: "Tweet", message: "Chirp Chirp!", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.Default, handler: {action in
+            self.dismissViewControllerAnimated(false, completion: nil) }
+            ))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
+    
+    func textViewDidChange(textView: UITextView) {
+        let newLength = 140 - textView.text.characters.count
+        print(newLength)
+        //change the value of the label
+        remainingCharactersLabel.text =  "\(newLength)"
+    }
+}
 
     
 
